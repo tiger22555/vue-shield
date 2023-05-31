@@ -5,7 +5,7 @@
      
           <div class="grid-content bg-purple">
   
-            <el-table :data="tableData" stripe   style="width: 100%;">
+            <el-table :data="tableData" stripe   style="width: 100%;" header-align="center">
               <el-table-column prop="id" label="编号"  > </el-table-column>
               <el-table-column prop="deviceName" label="名称" > </el-table-column>
               <el-table-column prop="description" label="描述" > </el-table-column>
@@ -38,7 +38,11 @@
               </el-table-column>
               <el-table-column prop="" label="功能" > 
                
-                <el-button type="primary" size="mini">容器</el-button>
+                <template slot-scope="scope">
+                  <el-button type="primary" size="mini" @click="navigateToContainer(scope.row.id)">容器</el-button>
+                </template>
+                
+                
               </el-table-column>
             </el-table>
   
@@ -87,14 +91,18 @@
        
       };
     },
-    
+    methods: {
+      navigateToContainer(id) {
+        this.$router.push('/device' + id)
+      },
+    },
     mounted(){
      axios.get('http://192.168.1.108:8081/device?detail=true').then((res)=>{
        this.tableData = res.data.data
      })
     },
-    methods:{
-    }
+   
+    
        
   }
    

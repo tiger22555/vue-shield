@@ -6,7 +6,7 @@ import User from '../views/User.vue'
 import Main from '../views/Main.vue'
 import Mall from '../views/Mall.vue'
 import Login from '../views/Login.vue'
-
+import Device1 from '../views/Device1.vue'
 Vue.use(VueRouter)
 
 
@@ -31,7 +31,8 @@ const routes = [
         children:[
             {path: 'home',component:Home},
             {path: 'user',component:User},
-            {path: 'mall',component:Mall}
+            {path: 'mall',component:Mall},
+            {path: 'device1',component:Device1} 
 
         ]
     },
