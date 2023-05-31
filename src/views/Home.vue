@@ -2,14 +2,14 @@
     <div>
      
       <el-row>
-        <el-col :span="16">
+     
           <div class="grid-content bg-purple">
   
-            <el-table :data="tableData" stripe   @row-click="handleRowClick"  style="width: 100%;">
-              <el-table-column prop="id" label="编号" > </el-table-column>
+            <el-table :data="tableData" stripe   style="width: 100%;">
+              <el-table-column prop="id" label="编号"  > </el-table-column>
               <el-table-column prop="deviceName" label="名称" > </el-table-column>
               <el-table-column prop="description" label="描述" > </el-table-column>
-              <el-table-column prop="ip" label="ip" > </el-table-column>
+              <el-table-column prop="ip" label="ip" align="center"> </el-table-column>
               <el-table-column prop="state" label="状态" > 
                 <template slot-scope="scope">
                   <i v-if="scope.row.state === 0" class="el-icon-success" style="color:green;"></i>
@@ -17,35 +17,35 @@
                   <i v-else class="el-icon-info" style="color:red;"></i>
                 </template>
               </el-table-column>
+
+              <el-table-column label="Ports" width="300px" >
+                <template slot-scope="scope" >
+                  <div class="port-item" v-for="port in scope.row.port" :key="port.id">
+                      <div class="port-info">
+                        <div class="port-label">端口名称:</div>
+                        <div class="port-value">{{ port.portName }}</div>
+                      </div>
+                      <div class="port-info">
+                        <div class="port-label">状态:</div>
+                        
+                          <i v-if="port.state === 200" class="el-icon-success" style="color:green;"></i>
+                          <i v-else-if="port.state === 0" class="el-icon-warning" style="color:yellow;"></i>
+                          <i v-else class="el-icon-info" style="color:red;"></i>
+                        
+                      </div>
+                    </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="" label="功能" > 
+               
+                <el-button type="primary" size="mini">容器</el-button>
+              </el-table-column>
             </el-table>
   
           </div>
   
-          <div class="grid-content bg-purple-light">
-  
-              <el-table v-if="isDropdownVisible" :data="dropdownTableData" >
-                <el-table-column prop="id" label="编号" > </el-table-column>
-                <el-table-column prop="containerName" label="容器名称" > </el-table-column>
-                <el-table-column prop="description" label="描述" > </el-table-column>
-                <el-table-column prop="agentName" label="名称" > </el-table-column>
-                <el-table-column prop="ip" label="ip" > </el-table-column>
-                <el-table-column prop="agentState" label="状态"> 
-                  <template slot-scope="scope">
-                    <i v-if="scope.row.agentState === 0" class="el-icon-success" style="color:green;"></i>
-                    <i v-else-if="scope.row.agentState === 1" class="el-icon-warning" style="color:yellow;"></i>
-                    <i v-else class="el-icon-info" style="color:red;"></i>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="" label="功能" > </el-table-column>
-              </el-table>
-  
-          </div>
-        </el-col>
-        
-        <el-col :span="8">
           
-        </el-col>
-        
+       
       </el-row>
     
       
@@ -54,6 +54,26 @@
   </template>
   
   <style scoped lang="less">
+
+.port-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.port-info {
+  display: flex;
+  margin-right: 10px;
+}
+
+.port-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.port-value {
+  color: gray;
+}
   </style>
   <script>
   
@@ -64,34 +84,17 @@
     data() {
       return {
         tableData: [],
-        isDropdownVisible: false,
-        dropdownTableData: [],
-        selectedRowIndex: -1
+       
       };
     },
     
     mounted(){
-     axios.get('http://192.168.1.108:8081/device').then((res)=>{
+     axios.get('http://192.168.1.108:8081/device?detail=true').then((res)=>{
        this.tableData = res.data.data
      })
     },
     methods:{
-      handleRowClick(row) {
-        this.isDropdownVisible = true;
-        this.loadDropdownData(row.id);   
-       
-      },
-   
-      loadDropdownData(id) {
-        const url = `http://192.168.1.108:8081/container?deviceId=${id}`;
-        axios.get(url)
-          .then((res) => {
-            this.dropdownTableData = res.data.data;
-          })
-        },
-  
-     
-    },   
+    }
        
   }
    
